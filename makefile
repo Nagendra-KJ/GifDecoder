@@ -1,3 +1,3 @@
 CC=gcc
-test: test.o gifdec.o
-	$(CC) -o test test.o gifdec.o	
+decoder: decoder.o gifdec.o
+	$(CC) -o decoder decoder.o gifdec.o -lm

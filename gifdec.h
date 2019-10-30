@@ -37,6 +37,18 @@ typedef struct gd_GIF {
     uint8_t bgindex;
     uint8_t *canvas, *frame;
 } gd_GIF;
+typedef struct gd_rgbPixel {
+	uint8_t red;
+	uint8_t blue;
+	uint8_t green;
+}rgbPixel;
+
+typedef struct gd_yuvPixel {
+	uint8_t y;
+	uint8_t u;
+	uint8_t v;
+}yuvPixel;
+
 
 gd_GIF *gd_open_gif(const char *fname);
 int gd_get_frame(gd_GIF *gif);
