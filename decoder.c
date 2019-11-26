@@ -57,8 +57,12 @@ int main(int argc, char *argv[])
 		return 4;
 	}
 	
-	yuvwidth = (gif->width%2==0)?gif->width:gif->width+1;
-	yuvheight = (gif->height%2==0)?gif->height:gif->height+1;
+	yuvwidth = (gif->width%2==0)?gif->width:gif->width-1;
+	yuvheight = (gif->height%2==0)?gif->height:gif->height-1;
+	if(gif->width%2!=0)
+		gif->width=gif->width-1;
+	if(gif->height%2!=0)
+		gif->height=gif->height-1;
 	yuvframesize=yuvwidth*yuvheight*3/2;
 	frame = malloc(gif->width * gif->height * 3);
 	yuvframe = malloc(yuvwidth*yuvheight*3*sizeof(float));
