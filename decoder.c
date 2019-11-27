@@ -4,7 +4,7 @@
 #include "gifdec.h"
 #include <math.h>
 
-#define FILENAME "output_yuv420sp.raw"
+#define FILENAME "output.raw"
 
 
 float rgb2y(uint8_t R,uint8_t G,uint8_t B)
@@ -21,7 +21,6 @@ float rgb2v(uint8_t R,uint8_t G,uint8_t B)
 }
 
 
-//@TODO RESIZE FOR ODD SIZES
 
 void convert(uint8_t *frameData,uint8_t *convertedData,int width,int height);
 
@@ -92,7 +91,7 @@ int main(int argc, char *argv[])
 	fclose(yuv420sp_file);
 	free(frame);
 	free(yuvframe);
-	printf("Conversion to YUV420sp is done, please find the file output_yuv420p to view your data.\n");
+	printf("Conversion to YUV420sp is done, please find the file output.raw to view your converted file.\n");
 	printf("The dimensions of the converted image is %d %d \n",yuvwidth,yuvheight);
 }
 void convert(uint8_t *data,uint8_t *yuv420sp,int width,int height)
@@ -164,52 +163,4 @@ void convert2lines(uint8_t *line1,uint8_t *line2,int width,uint8_t *yline1,uint8
 	}
 }
 
-void resize(uint8_t *original,uint8_t **new,int width,int height)
-{
-	int newWidth,newHeight;
-	if(width%2!=0)
-		newWidth=width+1;
-	if(height%2!=0)
-		newHeight=height+1;
-	(*new)=malloc(newWidth*newHeight*3);
-	uint8_t matrix[newHeight][newWidth*3];
-	int i,j,pos;
-	for(i=0;i<height;++i)
-	{
-		pos=i*width;
-		for(j=0;j<width;++j)
-		{
-			matrix[i][j*3]=original[pos];
-			matrix[i][(j*3)+1]=original[pos+1];
-			matrix[i][(j*3)+2]=original[pos+2];
-			pos+=3;
-		}
-		if(width!=newWidth)
-		{
-			matrix[i][width*3]=original[pos];
-			matrix[i][(width*3)+1]=original[pos+1];
-			matrix[i][(width*3)+2]=original[pos+2];
-		}
-	}
-	if(height!=newHeight)
-	{
-		for(j=0;j<newWidth;++j)
-		{
-			matrix[newHeight-1][j]=matrix[height-1][j];
-			matrix[newHeight-1][j+1]=matrix[height-1][j+1];
-			matrix[newHeight-1][j+2]=matrix[height-1][j+2];
 
-		}
-	}
-	pos=0;
-	for(i=0;i<newHeight;++i)
-	{
-		for(j=0;j<newWidth;++j)
-		{
-			(*new)[pos]=matrix[i][j];
-			(*new)[pos+1]=matrix[i][j+1];
-			(*new)[pos+2]=matrix[i][j+2];
-			pos+=3;
-		}
-	}
-}
